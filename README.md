@@ -8,3 +8,5 @@ Tech Stack
   - Sentence-BERT (SBERT) (Text embeddings for similarity comparisons)
   - PyTorch (For efficient tensor computations)
   - Pandas (For history preprocessing)
+
+![Suositusjärjestelmä drawio(1)](https://github.com/user-attachments/assets/05857ea2-0782-4eb7-b6e7-4b198b54b0a5)
