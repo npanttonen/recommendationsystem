@@ -10,12 +10,22 @@ function App() {
     setFile(e.target.files[0]);
   };
 
-  // Fetch browsing history from Firefox (automatic detection)
-  const handleFetchHistory = async () => {
+  // Fetch browsing history from Firefox
+  const handleFetchFirefoxHistory = async () => {
+    await fetchHistory("firefox");
+  };
+
+  // Fetch browsing history from Chrome
+  const handleFetchChromeHistory = async () => {
+    await fetchHistory("chrome");
+  };
+
+  // Generic function to fetch history from either browser
+  const fetchHistory = async (browser) => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:5001/recommend/firefox");
+      const response = await fetch(`http://127.0.0.1:5001/recommend/${browser}`);
       const data = await response.json();
 
       if (data.error) {
@@ -24,7 +34,7 @@ function App() {
         setRecommendations(data);
       }
     } catch (error) {
-      console.error("Error fetching history:", error);
+      console.error(`Error fetching ${browser} history:`, error);
     } finally {
       setLoading(false);
     }
@@ -38,7 +48,6 @@ function App() {
     }
 
     setLoading(true);
-
     const formData = new FormData();
     formData.append("file", file);
 
@@ -68,8 +77,13 @@ function App() {
       </button>
 
       {/* Fetch Firefox browsing history automatically */}
-      <button onClick={handleFetchHistory} disabled={loading}>
+      <button onClick={handleFetchFirefoxHistory} disabled={loading}>
         {loading ? "Fetching..." : "Fetch Firefox History"}
+      </button>
+
+      {/* Fetch Chrome browsing history automatically */}
+      <button onClick={handleFetchChromeHistory} disabled={loading}>
+        {loading ? "Fetching..." : "Fetch Chrome History"}
       </button>
 
       {/* Display recommendations */}
@@ -78,10 +92,26 @@ function App() {
           <h2>Recommended Movies</h2>
           <ul>
             {recommendations.map((movie, index) => (
-              <li key={index}>
-                <h3>{movie.title}</h3>
-                <p>{movie.overview}</p>
-                <strong>Score: {movie.combined_similarity.toFixed(4)}</strong>
+              <li key={index} className="movie-item">
+                <div className="movie-poster">
+                  {/* Display movie poster */}
+                  {movie.poster_url ? (
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.title}
+                      width="150"  // You can adjust the size here
+                      height="225" // Adjust the size as per your needs
+                    />
+                  ) : (
+                    <div>No Image Available</div> // In case no poster is available
+                  )}
+                </div>
+                <div className="movie-info">
+                  {/* Display movie title */}
+                  <h3>{movie.title}</h3>
+                  <p>{movie.overview}</p>
+                  <strong>Score: {movie.combined_similarity.toFixed(4)}</strong>
+                </div>
               </li>
             ))}
           </ul>
