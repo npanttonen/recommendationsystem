@@ -88,35 +88,26 @@ function App() {
 
       {/* Display recommendations */}
       {recommendations.length > 0 && (
-        <div className="recommendations">
-          <h2>Recommended Movies</h2>
-          <ul>
-            {recommendations.map((movie, index) => (
-              <li key={index} className="movie-item">
-                <div className="movie-poster">
-                  {/* Display movie poster */}
-                  {movie.poster_url ? (
-                    <img
-                      src={movie.poster_url}
-                      alt={movie.title}
-                      width="150"  // You can adjust the size here
-                      height="225" // Adjust the size as per your needs
-                    />
-                  ) : (
-                    <div>No Image Available</div> // In case no poster is available
-                  )}
-                </div>
-                <div className="movie-info">
-                  {/* Display movie title */}
-                  <h3>{movie.title}</h3>
-                  <p>{movie.overview}</p>
-                  <strong>Score: {movie.combined_similarity.toFixed(4)}</strong>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="recommendations-grid">
+        {recommendations.map((movie, index) => (
+          <div key={index} className="movie-card">
+            {movie.poster_url ? (
+              <img
+                src={movie.poster_url}
+                alt={movie.title}
+                className="poster"
+              />
+            ) : (
+              <div className="no-image">No Image Available</div>
+            )}
+            <h3 className="movie-title">{movie.title}</h3>
+            <p className="movie-score">
+              Score: {movie.combined_similarity.toFixed(4)}
+            </p>
+          </div>
+        ))}
+      </div>
+    )}
     </div>
   );
 }
